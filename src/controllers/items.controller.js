@@ -6,7 +6,7 @@ const search = async (params) => {
   const { filters, results } = await doGet(endPoints.search, params);
   const currencies = await doGet(endPoints.currencies);
 
-  let categories = [];
+  let categories = {};
   let items = [];
 
   if (filters && filters.length > 0) {
@@ -57,7 +57,7 @@ const getById = async (id) => {
     'title', 'currency_id',
     'condition', 'shipping',
     'pictures', 'sold_quantity',
-    'shipping', 'thumbnail_id'];
+    'shipping', 'thumbnail_id', 'category_id'];
   params.attributes = attributes.toString();
   const data = await doGet(endPoints.getById, params);
 
@@ -74,8 +74,11 @@ const getById = async (id) => {
       free_shipping: freeShipping
     },
     pictures, catalog_product_id: catalogProductId,
+    category_id: categoryId
   } = body;
+
   const currencie = await doGet(`${endPoints.currencies}/${currency}`);
+  const categories = await doGet(`${endPoints.categories}/${categoryId}`);
 
   const picture = pictures.find((item) => item.id === thumbnailId);
   let description = '';
@@ -90,6 +93,7 @@ const getById = async (id) => {
       name: 'Juan',
       lastname: 'Tangarife'
     },
+    categories,
     item: {
       id: idItem,
       title,
