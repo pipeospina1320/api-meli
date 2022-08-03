@@ -1,5 +1,5 @@
 const express = require('express');
-const { search } = require('../controllers/items.controller');
+const { search, getById } = require('../controllers/items.controller');
 
 const router = express.Router();
 
@@ -14,6 +14,13 @@ router.get('/', async (req, res, next) => {
 });
 
 router.get('/:id', async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const item = await getById(id);
+    res.json(item);
+  } catch (error) {
+    next(error);
+  }
 });
 
 module.exports = router;

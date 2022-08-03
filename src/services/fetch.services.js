@@ -12,17 +12,16 @@ const createPath = (url) => {
 };
 
 const configRequest = (method, body) => ({
-  method: 'post',
+  method,
   headers: HEAD_CONTENT,
   body: JSON.stringify(body),
 });
 
-const doGet = async (path, data = {}) => {
+const doGet = async (path, params = {}) => {
   const urlPath = createPath(path);
-  const params = new URLSearchParams(data);
-  const url = `${urlPath}?${params.toString()}`;
-  console.log(url);
-  const response = await fetch(url, configRequest('GET', data));
+  const searchParams = new URLSearchParams(params);
+  const url = `${urlPath}?${searchParams.toString()}`;
+  const response = await fetch(url, configRequest('GET'));
   const dataJson = await response.json();
   return dataJson;
 };
